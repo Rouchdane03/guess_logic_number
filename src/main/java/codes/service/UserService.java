@@ -4,6 +4,7 @@ import codes.dao.UserDao;
 import codes.entity.Opinion;
 import codes.entity.User;
 import codes.entity.UserRequestBody;
+import codes.exception.InvalidStarsException;
 import codes.exception.UserExistsException;
 import codes.exception.UserNotChangedException;
 import codes.exception.UserNotFoundException;
@@ -24,6 +25,9 @@ public class UserService {
          //Chef if user email exists
         if(userDao.isEmailExists(userRequestBody.email())){
             throw new UserExistsException("This email already exists");
+        }
+        if (userRequestBody.opinion().givenStars()>5 || userRequestBody.opinion().givenStars()<1){
+            throw new InvalidStarsException("[%s] is outside the stars range".formatted(userRequestBody.opinion().givenStars()));
         }
         User user = new User(userRequestBody.username(),userRequestBody.email(),new Opinion(userRequestBody.opinion().message(),userRequestBody.opinion().givenStars()));
         userDao.insertUser(user);

@@ -6,14 +6,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.Random;
 
 @SpringBootApplication
-public class GuessRandomNumberApplication {
+public class GuessLogicNumberApplication {
 
 	private static final Random RANDOM = new Random();
 
 	public static int GENERATED_VALUE;
 
 	public static void main(String[] args) {
-		SpringApplication.run(GuessRandomNumberApplication.class, args);
+		SpringApplication.run(GuessLogicNumberApplication.class, args);
 		System.out.println("the app is running");
 		GENERATED_VALUE = getTheRandomNumber();
 	}

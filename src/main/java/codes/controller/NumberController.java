@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static codes.GuessRandomNumberApplication.GENERATED_VALUE;
+import static codes.GuessLogicNumberApplication.GENERATED_VALUE;
 
 @RestController
 @RequestMapping(path = "api/v1/number")
