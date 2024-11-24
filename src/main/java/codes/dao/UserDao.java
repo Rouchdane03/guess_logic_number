@@ -37,11 +37,11 @@ public class UserDao {
     }
 
     public boolean isIdExists(int id){
-        return userRepository.existsById(id);
+        return userRepository.existsUserById(id);
     }
 
-    public boolean isEmailExists(String email){
-        return userRepository.existsUserByEmail(email);
+    public boolean isUsernameExists(String username){
+        return userRepository.existsUserByUsername(username);
     }
 
 }

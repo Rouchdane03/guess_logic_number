@@ -14,12 +14,12 @@ public class NumberController {
     @GetMapping("/{number}")
     public GuessNumber guessTheNumber(@PathVariable int number) {
 
-        Clue clue = Clue.NO_NEED_ALREADY_FOUND;
+        ClueEnum clue = ClueEnum.NO_NEED_ALREADY_FOUND;
 
         if(number!=GENERATED_VALUE){
             return new GuessNumber(number,false,clue.giveMeClue(GENERATED_VALUE));
         }
         else return new GuessNumber(number,true,clue);
     }
-    record GuessNumber(int inputValue, boolean guessed, Clue clue){}
+    record GuessNumber(int inputValue, boolean guessed, ClueEnum clue){}
 }

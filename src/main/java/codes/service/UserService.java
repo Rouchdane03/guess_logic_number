@@ -1,15 +1,15 @@
 package codes.service;
 
 import codes.dao.UserDao;
-import codes.entity.Opinion;
-import codes.entity.User;
-import codes.entity.UserRequestBody;
+import codes.entity.*;
 import codes.exception.InvalidStarsException;
 import codes.exception.UserExistsException;
 import codes.exception.UserNotChangedException;
 import codes.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,14 +22,19 @@ public class UserService {
     }
 
     public void createUser(UserRequestBody userRequestBody){
-         //Chef if user email exists
-        if(userDao.isEmailExists(userRequestBody.email())){
-            throw new UserExistsException("This email already exists");
+         //Chef if user username exists
+        if(userDao.isUsernameExists(userRequestBody.username())){
+            throw new UserExistsException("This username already exists");
         }
-        if (userRequestBody.opinion().givenStars()>5 || userRequestBody.opinion().givenStars()<1){
-            throw new InvalidStarsException("[%s] is outside the stars range".formatted(userRequestBody.opinion().givenStars()));
+        if (userRequestBody.review().givenStars()>5 || userRequestBody.review().givenStars()<1){
+            throw new InvalidStarsException("[%s] is outside the stars range".formatted(userRequestBody.review().givenStars()));
         }
-        User user = new User(userRequestBody.username(),userRequestBody.email(),new Opinion(userRequestBody.opinion().message(),userRequestBody.opinion().givenStars()));
+
+        User user = new User(
+                userRequestBody.username(),
+                userRequestBody.gameModes().stream().map(element -> new UserGameMode(element.gameLevelPlayed(),element.elapsedTimeForThisLevel())).toList(),
+                new Review(userRequestBody.review().message(), userRequestBody.review().givenStars())
+        );
         userDao.insertUser(user);
     }
 
@@ -49,30 +54,62 @@ public class UserService {
         return userDao.getUserById(userId).orElseThrow(()->new UserNotFoundException("user with id [%s] not found".formatted(userId)));
     }
 
+    //The big process
+   // @Transactional no need
     public void changeUser(UserRequestBody userRequestBody, int userId){
+
         User user = selectUserById(userId);
         boolean changement = false;
 
+        // ❗️⁉️FIRST IF BLOCK FOR USERNAME
         if(userRequestBody.username()!=null && !userRequestBody.username().equals(user.getUsername())){
+            if(userDao.isUsernameExists(userRequestBody.username())){
+                throw new UserExistsException("This username already exists");
+            }
             user.setUsername(userRequestBody.username());
             changement = true;
         }
-        else if(userRequestBody.email()!=null && !userRequestBody.email().equals(user.getEmail())){
-            if(userDao.isEmailExists(userRequestBody.email())){
-                throw new UserExistsException("This email already exists");
-            }
-            user.setEmail(userRequestBody.email());
-            changement = true;
+
+        // ❗️⁉️SECOND IF BLOCK FOR GAME MODES
+        // vérifier d'abord qu'on veut pas affecté null au gameModes du user
+        if(userRequestBody.gameModes()!=null){
+
+             //conversion List<GameModeRequestBody> en List<UserGameMode> pour la comparaison
+            List<UserGameMode> listeGameModesEntrant = userRequestBody.gameModes().stream().map(element -> new UserGameMode(element.gameLevelPlayed(),element.elapsedTimeForThisLevel())).toList();
+
+            //Comprarer listeGameModesEntrant avec celui existant déjà à l'id spécifié
+
+           if (listeGameModesEntrant.equals(user.getGameModes())){
+               throw new UserNotChangedException("the gameModes do not changed, please update that");
+           }
+
+            //y'a une subtilité pour la suite car le set est censé supprimé aussi
+            // dans la base mais il va pas le faire car je pointe une opération directement sur l'enfant
+            //EN fait les anciens valeurs qui étaient associées à la table seront pas supprimées
+            //car pour le faire, il faut qu'on supprime le parent,mais nous on veut pas ça
+            //sinon qu'avec ça suis censé avoir des doublons dans ma table. parce qu'après tout le update
+            //fais un insert à la fin et dans ce cas il va rajouter d'autres lignes à la table game_modes
+            //ce faisant y'aura des doublons.
+           user.getGameModes().clear();
+           user.getGameModes().addAll(listeGameModesEntrant);
+           //user.setGameModes(listeGameModesEntrant); //hibernate comprends pas ceci
+           changement = true;
         }
-        else if(userRequestBody.opinion()!=null){
-            if (!userRequestBody.opinion().message().equals(user.getOpinion().getMessage())){
-                user.setOpinion(new Opinion(userRequestBody.opinion().message(),user.getOpinion().getGivenStars()));
-                changement = true;
+
+        // ❗️⁉️THIRD IF BLOCK FOR USER REVIEW
+        // vérifier d'abord qu'on veut pas affecté null au review du user
+        if(userRequestBody.review()!=null){
+            //le user pourra modifer son message et son nbr d'étoiles tant qu'il veut
+
+            //conversion ReviewRequestBody en Review pour la comparaison
+            Review reviewEntrant = new Review(userRequestBody.review().message(),userRequestBody.review().givenStars());
+
+            //Comprarer reviewEntrant avec celui existant déjà à l'id spécifié
+            if (reviewEntrant.equals(user.getReview())){
+                throw new UserNotChangedException("the review do not changed, please update that");
             }
-            if (userRequestBody.opinion().givenStars()!=user.getOpinion().getGivenStars()){
-                user.setOpinion(new Opinion(user.getOpinion().getMessage(),userRequestBody.opinion().givenStars()));
-                changement = true;
-            }
+             user.setReview(reviewEntrant);
+             changement = true;
         }
 
         if(!changement){

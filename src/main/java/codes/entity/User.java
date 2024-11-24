@@ -2,6 +2,12 @@ package codes.entity;
 
 import jakarta.persistence.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -19,32 +25,49 @@ public class User {
     @Column(columnDefinition = "BIGSERIAL")
     private int id;
 
-    @Column
+    @Column(nullable = false)
     private String username;
 
-    @Column
-    private String email;
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private List<UserGameMode> gameModes = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_opinion_id", referencedColumnName = "opinion_id")
-    private Opinion opinion;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "user_review_id", referencedColumnName = "id")
+    private Review review;
 
-    /**
-     * Constructor, getters, setters & toString methods
-     */
-    public User() {}
+    @Column(nullable = false)
+    private LocalDateTime passedAt;
 
-    public User(String username, String email, Opinion opinion) {
-        this.username = username;
-        this.email = email;
-        this.opinion = opinion;
+    // Méthode appelée automatiquement avant la persistance
+    @PrePersist
+    public void setPassedAt() {
+        this.passedAt = LocalDateTime.now(); // Définit la date actuelle
     }
 
-    public User(int id, String username, String email, Opinion opinion) {
+    // Mise à jour lors d'une modification
+    @PreUpdate
+    public void updatePassedAt() {
+        this.passedAt = LocalDateTime.now(); // Change la date passedAt à chaque mise à jour
+    }
+     /**
+      * Constructor, getters, setters & toString methods
+      */
+    public User() {
+    }
+
+    public User(String username, List<UserGameMode> gameModes, Review review) {
+        this.username = username;
+        this.gameModes = gameModes;
+        this.review = review;
+    }
+
+    public User(int id, String username, List<UserGameMode> gameModes, Review review, LocalDateTime passedAt) {
         this.id = id;
         this.username = username;
-        this.email = email;
-        this.opinion = opinion;
+        this.gameModes = gameModes;
+        this.review = review;
+        this.passedAt = passedAt;
     }
 
     public int getId() {
@@ -63,20 +86,29 @@ public class User {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public List<UserGameMode> getGameModes() {
+        return gameModes;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setGameModes(List<UserGameMode> gameModes) {
+        this.gameModes = gameModes;
     }
 
-    public Opinion getOpinion() {
-        return opinion;
+
+    public Review getReview() {
+        return review;
     }
 
-    public void setOpinion(Opinion opinion) {
-        this.opinion = opinion;
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
+    public LocalDateTime getPassedAt() {
+        return passedAt;
+    }
+
+    public void setPassedAt(LocalDateTime passedAt) {
+        this.passedAt = passedAt;
     }
 
     @Override
@@ -84,8 +116,22 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", opinion=" + opinion +
+                ", gameModes=" + gameModes +
+                ", review=" + review +
+                ", passedAt=" + passedAt +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username) && Objects.equals(gameModes, user.gameModes) && Objects.equals(review, user.review) && Objects.equals(passedAt, user.passedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, gameModes, review, passedAt);
     }
 }
