@@ -9,7 +9,6 @@ public class TestingTestContainersConfigurationTest extends AbstractTestcontaine
 
     @Test
     void canStartPostgresDB() {
-        System.out.println(postgreSQLContainer.getJdbcUrl());
         assertThat(postgreSQLContainer.isRunning()).isTrue();
         assertThat(postgreSQLContainer.isCreated()).isTrue();
     }
