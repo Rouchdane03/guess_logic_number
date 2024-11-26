@@ -18,7 +18,7 @@ public class Review {
             generator = "reviews_id_seq"
     )
     @Column(columnDefinition = "BIGSERIAL")
-    private int id;
+    private Integer id;
 
     @Column(nullable = false)
     private String message;
@@ -36,17 +36,17 @@ public class Review {
         this.givenStars = givenStars;
     }
 
-    public Review(int id, String message, int givenStars) {
+    public Review(Integer id, String message, int givenStars) {
         this.id = id;
         this.message = message;
         this.givenStars = givenStars;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -2,7 +2,6 @@ package codes.entity;
 
 import jakarta.persistence.*;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class User {
             generator = "users_id_seq"
     )
     @Column(columnDefinition = "BIGSERIAL")
-    private int id;
+    private Integer id;
 
     @Column(nullable = false)
     private String username;
@@ -62,7 +61,7 @@ public class User {
         this.review = review;
     }
 
-    public User(int id, String username, List<UserGameMode> gameModes, Review review, LocalDateTime passedAt) {
+    public User(Integer id, String username, List<UserGameMode> gameModes, Review review, LocalDateTime passedAt) {
         this.id = id;
         this.username = username;
         this.gameModes = gameModes;
@@ -70,11 +69,11 @@ public class User {
         this.passedAt = passedAt;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

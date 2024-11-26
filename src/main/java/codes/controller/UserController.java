@@ -22,7 +22,7 @@ public class UserController {
    }
 
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable int id){
+    public User findUserById(@PathVariable Integer id){
       return userService.selectUserById(id);
     }
 
@@ -32,12 +32,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable int id){
+    public void deleteUserById(@PathVariable Integer id){
        userService.removeUserById(id);
     }
 
     @PutMapping("/{id}")
-    public void updateUserById( @RequestBody UserRequestBody userRequestBody, @PathVariable int id){
+    public void updateUserById( @RequestBody UserRequestBody userRequestBody, @PathVariable Integer id){
          userService.changeUser(userRequestBody, id);
     }
 

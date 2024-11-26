@@ -21,7 +21,7 @@ public class UserGameMode {
           generator = "game_modes_id_seq"
   )
   @Column(columnDefinition = "BIGSERIAL")
-  private int id;
+  private Integer id;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "game_level_played", nullable = false)
@@ -37,7 +37,7 @@ public class UserGameMode {
 
   public UserGameMode(){}
 
-  public UserGameMode(int id, GameModeEnum gameMode, Duration elapsedTimeForThisLevel) {
+  public UserGameMode(Integer id, GameModeEnum gameMode, Duration elapsedTimeForThisLevel) {
     this.id = id;
     this.gameLevelPlayed = gameMode;
   }
@@ -47,11 +47,11 @@ public class UserGameMode {
     this.elapsedTimeForThisLevel = elapsedTimeForThisLevel;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
