@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "guess_logic_number",
-      "image": "rouchdane/guess_logic_number",
+      "image": "rouchdane/guess_logic_number:latest",
       "essential": true,
       "memory": 512,
       "portMappings": [

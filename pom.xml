@@ -182,17 +182,7 @@
 						</tags>
 					</to>
 				</configuration>
-				<executions>
-					<execution>
-						<!-- Bind the jib:build goal to the "verify" phase -->
-						<phase>verify</phase>
-						<goals>
-							<goal>build</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 
