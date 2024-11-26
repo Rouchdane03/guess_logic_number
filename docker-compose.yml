@@ -29,6 +29,18 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+  guess_logic_number:
+    container_name: guess_logic_number
+    image: rouchdane/guess_logic_number
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/game"
+    ports:
+      - "8086:8081"
+    networks:
+      - postgres
+    depends_on:
+      - db
+    restart: unless-stopped
 
 networks:
   postgres:
