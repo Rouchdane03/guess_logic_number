@@ -43,7 +43,7 @@ public class GuessLogicNumberApplication {
 	/**
 	 * adding a commandLineRunner to insert quickly an user, each time we load the app
 	 */
-	/*
+
 	@Bean
 	CommandLineRunner runner(UserRepository userRepository) {
 		return args -> {
@@ -56,7 +56,7 @@ public class GuessLogicNumberApplication {
 			 * donc [0, 3[
 			 * peut importe la methode nextint choisie, l'intervalle toujours ouvert sur la limite
 			 */
-			/*
+
 			List<UserGameMode> gameModes = new ArrayList<>();
 			List<GameModeEnum> enums = List.of(GameModeEnum.EASY,GameModeEnum.MEDIUM,GameModeEnum.HARD);
 			int index = RANDOM.nextInt(enums.size());
@@ -92,10 +92,6 @@ public class GuessLogicNumberApplication {
 
 			User user = new User(faker.name().username(),gameModes,new Review(message,random_stars));
 			userRepository.save(user);
-*/
-	/*
 		};
-
-	 */
-//	}
+	}
 }

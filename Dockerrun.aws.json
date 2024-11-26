@@ -15,7 +15,7 @@
       "environment": [
         {
           "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:postgresql://TODO:5432/game"
+          "value": "jdbc:postgresql://awseb-e-euu2epsdwj-stack-awsebrdsdatabase-hnqjlvlkiqiu.c10s8wiekjft.eu-west-3.rds.amazonaws.com:5432/game"
         }
       ]
     }
