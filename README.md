@@ -45,7 +45,7 @@
 5. Ouvrez votre navigateur à l'adresse suivante :
 
    ```
-   http://localhost:8080
+   http://localhost:8081
    ```
 
 ## Tests
@@ -70,7 +70,7 @@ mvn test
    docker-compose up
    ```
 
-3. L’application sera accessible sur le port configuré (par défaut : `8080`).
+3. L’application sera accessible sur le port configuré (par défaut : `8081`).
 
 ## Auteur
 
