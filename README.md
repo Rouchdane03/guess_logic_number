@@ -72,23 +72,6 @@ mvn test
 
 3. L’application sera accessible sur le port configuré (par défaut : `8080`).
 
-## Contribution
-
-Les contributions sont les bienvenues !
-
-1. Forkez le dépôt.
-2. Créez une branche pour vos modifications :
-
-   ```bash
-   git checkout -b feature/nom-de-votre-branche
-   ```
-
-3. Soumettez une pull request avec une description claire de vos modifications.
-
-## Licence
-
-Ce projet est sous licence MIT. Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
-
 ## Auteur
 
 - **Rouchdane03**
